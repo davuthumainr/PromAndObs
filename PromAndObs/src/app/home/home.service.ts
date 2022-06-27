@@ -8,12 +8,10 @@ import { Note } from './home.model';
   providedIn: 'root',
 })
 export class HomeService {
-  constructor(private http:HttpClient) {}
+  constructor(private http: HttpClient) {}
 
-  //add note
-  addNote(title: string, note: string) {
-    let generatedId: string;
-
+  //add note with obs
+  addNoteWithObs(title: string, note: string) {
     const newNote = new Note(Math.random().toString(), title, note);
 
     this.http
@@ -29,8 +27,8 @@ export class HomeService {
       .subscribe();
   }
 
-  //fetch notes
-  fetchNotes() {
+  //fetch notes with obs
+  fetchNotesWithObs() {
     this.http
       .get('https://promandobs2-default-rtdb.firebaseio.com/notes.json')
       .pipe(
@@ -46,6 +44,46 @@ export class HomeService {
         tap((notes) => {
           console.log(notes);
         })
-      ).subscribe();
+      )
+      .subscribe();
+  }
+
+  //add note with prom
+  addNoteWithProm(title: string, note: string) {
+    const newNote = new Note(Math.random().toString(), title, note);
+
+    new Promise<any>((resolve, reject) => {
+      this.http
+        .post('https://promandobs2-default-rtdb.firebaseio.com/notes.json', {
+          ...newNote,
+          id: null,
+        })
+        .toPromise()
+        .then((res) => {
+          console.log(res);
+          resolve(res);
+        })
+        .catch((err) => {
+          console.log('REJECTED: ' + JSON.stringify(err));
+          reject(err);
+        });
+    });
+  }
+
+  //fetch note with prom
+  fetchNotesWithProm() {
+    new Promise<any>((resolve, reject) => {
+      this.http
+        .get('https://promandobs2-default-rtdb.firebaseio.com/notes.json')
+        .toPromise()
+        .then((res) => {
+          console.log(res);
+          resolve(res);
+        })
+        .catch((err) => {
+          console.log('REJECTED: ' + JSON.stringify(err));
+          reject(err);
+        });
+    });
   }
 }
