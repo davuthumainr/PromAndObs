@@ -1,0 +1,7 @@
+{
+  "name": "PromAndObs",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
