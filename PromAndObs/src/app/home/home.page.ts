@@ -1,12 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { HomeService } from './home.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
 })
-export class HomePage {
+export class HomePage implements OnInit {
+  title: string = 'weekley shopping';
+  note: string =
+    'On Saturday, daily needs will be bought from the supermarket.';
+  constructor(private homeService: HomeService) {}
 
-  constructor() {}
-
+  ngOnInit(): void {
+    // this.homeService.addNote(this.title, this.note);
+    this.homeService.fetchNotes();
+  }
 }
